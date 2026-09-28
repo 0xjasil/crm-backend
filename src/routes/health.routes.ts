@@ -1,6 +1,16 @@
-﻿import { FastifyPluginAsync } from 'fastify';
+import { FastifyPluginAsync } from 'fastify';
 
 export const healthRoutes: FastifyPluginAsync = async (fastify) => {
+  fastify.get('/', async () => {
+    return {
+      name: 'CRM Elevate API',
+      status: 'running',
+      documentation: '/api/docs',
+      health: '/health',
+      version: '1.0.0',
+    };
+  });
+
   fastify.get('/health', async () => {
     return { status: 'ok', timestamp: new Date().toISOString() };
   });
