@@ -4,6 +4,9 @@
   "functions": {
     "api/index.ts": {
       "includeFiles": "{dist/**,src/services/pdf/templates/**,node_modules/@pdfme/**}"
+    },
+    "src/app.ts": {
+      "includeFiles": "{dist/**,src/services/pdf/templates/**,node_modules/@pdfme/**}"
     }
   },
   "rewrites": [
