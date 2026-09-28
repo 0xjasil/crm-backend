@@ -30,14 +30,14 @@ importers:
         specifier: ^5.2.2
         version: 5.2.6
       '@pdfme/common':
-        specifier: ^5.4.0
-        version: 5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))
+        specifier: ^4.5.2
+        version: 4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))
       '@pdfme/generator':
-        specifier: ^5.4.0
-        version: 5.5.10(@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))(@pdfme/schemas@5.5.10(@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))))
+        specifier: ^4.5.2
+        version: 4.5.2(@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))(@pdfme/schemas@4.5.2(@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))))
       '@pdfme/schemas':
-        specifier: ^5.4.0
-        version: 5.5.10(@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))
+        specifier: ^4.5.2
+        version: 4.5.2(@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))
       '@prisma/client':
         specifier: ^6.19.0
         version: 6.19.3(prisma@6.19.3(typescript@5.9.3))(typescript@5.9.3)
@@ -356,23 +356,23 @@ packages:
   '@pdf-lib/upng@1.0.1':
     resolution: {integrity: sha512-dQK2FUMQtowVP00mtIksrlZhdFXQZPC+taih1q4CvPZ5vqdxR/LKBaFg0oAfzd1GlHZXXSPdQfzQnt+ViGvEIQ==}
 
-  '@pdfme/common@5.5.10':
-    resolution: {integrity: sha512-UP4Fm6pT50CwqqAYPO1Dxe7eWfZYAdRo84N0weYMP0NFIwBRUTHaY4/yTbUVNLyXeUi5w0AYJbzKcxflvauKmw==}
+  '@pdfme/common@4.5.2':
+    resolution: {integrity: sha512-dgY4BzDDHGIGO7pOHwI3/lD4BToji68D7F+V5wQ+FQ1Z98zJzue8cy7PC2gF0usAOz7DzBp+c6G+1KnFjMCXew==}
     peerDependencies:
       antd: ^5.11.2
       form-render: ^2.2.20
 
-  '@pdfme/generator@5.5.10':
-    resolution: {integrity: sha512-CGeEQmy/odNXZLhTgAAlM5aM/Vhv4gcnTyWo+KI5QXW+5hnR4zs7eN3GY/v9ATEOil7yeYNAQkunmpbn+5WHcg==}
+  '@pdfme/generator@4.5.2':
+    resolution: {integrity: sha512-lwvNnknTjAlmThkdxNJLcr/1/gYUW1H6xvtdX7t1OSQ/oEJfgcR9oFsUsR+OTnEYDN4zXkAmQbm1K/tnjNQWVA==}
     peerDependencies:
       '@pdfme/common': latest
       '@pdfme/schemas': latest
 
-  '@pdfme/pdf-lib@6.1.12':
-    resolution: {integrity: sha512-AZJ+grbyrrPm15kmyt/Fc3unui8mhFQBPdPppcoApK+bAfbIV4RnmQBLm/HLr+jsE7ciK13c0IEYSVDkH3tPbw==}
+  '@pdfme/pdf-lib@1.18.4':
+    resolution: {integrity: sha512-i9XGkKCCb2wHLfJC/wUZ221/58o4unG4dGvnS+Tk8kOQBVMf+DCXzIqs0SGDsF3DrEpXHIhaW2iscWNjM0qNtA==}
 
-  '@pdfme/schemas@5.5.10':
-    resolution: {integrity: sha512-vDSNKAfwYenBYYhqYrR3X8rZIRZa8A0BaO1w185WJ18DT1GAdoqNdWfyX2P7qX2KU0+yYW19gUbbcFw3mWza7Q==}
+  '@pdfme/schemas@4.5.2':
+    resolution: {integrity: sha512-uUioJv7ZjGDCXJSCbJGVB0dNc9Dvqnb1JYJ1UmrkhExAHtVp6nzMa5wRYd+kUdZcycwucIMxj2gznw4BhbQvtQ==}
     peerDependencies:
       '@pdfme/common': latest
 
@@ -477,16 +477,8 @@ packages:
   '@types/node@22.20.2':
     resolution: {integrity: sha512-xlvWf4Vs9n1PEVYwP1n4vvG07M6y8WgvJ2t0vbrWTmijsIHp1cS+uJ2kMIRdY3nHZK0nCYKrPeD171+SzF4/zw==}
 
-  '@types/trusted-types@2.0.7':
-    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
-
   abstract-logging@2.0.1:
     resolution: {integrity: sha512-2BjRTZxTPvheOvGbBslFSYOUkr+SjPtOnrLP33f+VIWLzezQpZcqVg7ja3L4dBXmzzgwT+a029jRx5PCi3JuiA==}
-
-  acorn@8.18.0:
-    resolution: {integrity: sha512-lGq+9yr1/GuAWaVYIHRjvvySG5/4VfKIvC8EWxStPdcDh/Ka7FG3twP6v4d5BkravUilhIAsG4Qj83t02LWUPQ==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
 
   add-dom-event-listener@1.1.0:
     resolution: {integrity: sha512-WCxx1ixHT0GQU9hb0KI/mhgRQhnU+U3GvwY6ZvVjYq8rsihIGoaIOUbY0yMPBxLH5MDtr0kz3fisWGNcbWW7Jw==}
@@ -496,9 +488,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-
-  air-datepicker@3.6.0:
-    resolution: {integrity: sha512-+txUkqa949rXBJDmkQAIb/GehZECJYF4rm9XJxVYtEX22C9WvBpE/XwCUQZBopKIkpg4ycAySJ9lH3JOg9qQTw==}
 
   ajv-formats@3.0.1:
     resolution: {integrity: sha512-8iUql50EUR+uUcdRQ3HDqa6EVyo3docL8g5WJ3FNcWmu62IbkGUue/pEyLBW8VGKKucTPgqeks4fIU1DA4yowQ==}
@@ -522,6 +511,11 @@ packages:
 
   async-validator@3.5.2:
     resolution: {integrity: sha512-8eLCg00W9pIRZSB781UUX/H6Oskmm8xloZfr09lz5bikRpBVDlJ3hRVuxxP1SxcwsEYfJ4IU8Q19Y8/893r3rQ==}
+
+  atob@2.1.2:
+    resolution: {integrity: sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==}
+    engines: {node: '>= 4.5.0'}
+    hasBin: true
 
   atomic-sleep@1.0.0:
     resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
@@ -589,9 +583,9 @@ packages:
   color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
 
-  color-convert@3.1.3:
-    resolution: {integrity: sha512-fasDH2ont2GqF5HpyO4w0+BcewlhHEZOFn9c1ckZdHpJ56Qb7MHhH/IcJZbBGgvdtwdwNbLvxiBEdg336iA9Sg==}
-    engines: {node: '>=14.6'}
+  color-convert@2.0.1:
+    resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
+    engines: {node: '>=7.0.0'}
 
   color-name@1.1.3:
     resolution: {integrity: sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==}
@@ -599,23 +593,15 @@ packages:
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
 
-  color-name@2.1.1:
-    resolution: {integrity: sha512-p2FdgwVx1a9yWBHP2wI0VgShkDpgN4kZISkxdNipGBJWpa5G6b04OINlVWCyJj0JmfvcPrgqt95E9k8yvaOJFg==}
-    engines: {node: '>=12.20'}
-
   color-string@1.9.1:
     resolution: {integrity: sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==}
-
-  color-string@2.1.4:
-    resolution: {integrity: sha512-Bb6Cq8oq0IjDOe8wJmi4JeNn763Xs9cfrBcaylK1tPypWzyoy2G3l90v9k64kjphl/ZJjPIShFztenRomi8WTg==}
-    engines: {node: '>=18'}
 
   color@3.2.1:
     resolution: {integrity: sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==}
 
-  color@5.0.3:
-    resolution: {integrity: sha512-ezmVcLR3xAVp8kYOm4GS45ZLLgIE6SPAFoduLr6hTDajwb3KZ2F46gulK3XpcwRFb5KKGCSezCBAY4Dw4HsyXA==}
-    engines: {node: '>=18'}
+  color@4.2.3:
+    resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
+    engines: {node: '>=12.5.0'}
 
   colorette@2.0.20:
     resolution: {integrity: sha512-IfEDxwoWIjkeXL1eXcDiow4UbKjhLdq6/EuSVR9GMN7KVH3r9gQ83e73hsz1Nd1T3ijd5xv1wcWRYO+D6kCI2w==}
@@ -713,9 +699,6 @@ packages:
   dom-align@1.12.4:
     resolution: {integrity: sha512-R8LUSEay/68zE5c8/3BDxiTEvgb4xZTF0RKmAHfiEVN3klfIpXfi2/QCoiWPccVQ0J/ZGdz9OjzL4uJEP/MRAw==}
 
-  dompurify@3.4.15:
-    resolution: {integrity: sha512-EUBjM+B+lkDE41iE82DDSCfkoPGfXx8IxFxPMjNzm/Uk4xDet77rTN9wqlxlVg71kK7XGuUMv6wUxJUwwv+Xyw==}
-
   dotenv@16.6.1:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
@@ -775,6 +758,10 @@ packages:
 
   fast-uri@4.1.4:
     resolution: {integrity: sha512-dODXrIxlS9JSdgAnhIUKOosKV1oMtU2VtVw87QRaHzyl5jxO290Ii5tEZfCfzfWNHi3jKWwBSdQj0qIyshdZdQ==}
+
+  fast-xml-parser@4.5.7:
+    resolution: {integrity: sha512-a6Qh1RMCNbSrU1+sAyAAZH3rTe+OaWJbNZIq0S+ifZciUUOQtlVxBJwoTUE2bYhysmG/RYyI5WJFIKdBahJdrQ==}
+    hasBin: true
 
   fastfall@1.5.1:
     resolution: {integrity: sha512-KH6p+Z8AKPXnmA7+Iz2Lh8ARCMr+8WNPVludm1LGkZoD2MjY6LVnRMtTKhkdzI+jr0RzQWXKzKyBJm1zoHEL4Q==}
@@ -900,9 +887,6 @@ packages:
     resolution: {integrity: sha512-4pfM1Ff0x50o0tQwb5ucw/RzNyD0/YJME6IVcStalZuMWxdt3sR3huStTtxz4PUmvZfRguvDejasvQ2kifR11g==}
     engines: {node: 20 || >=22}
 
-  lucide@0.577.0:
-    resolution: {integrity: sha512-PpC/m5eOItp/WU/GlQPFBXDOhq6HibL73KzYP37OX3LM7VmzWQF8voEj8QRWUFvy9FIKfeDQkWYoyS1D/MdWFA==}
-
   media-typer@1.1.1:
     resolution: {integrity: sha512-yz3xRaG20c6/BOzvYoDaGtPmGscs7YivItZEEqe6GbwNfHuxu9YNmvnEkMzKldAGY4/80pRcQRZSEnhquk9XuQ==}
     engines: {node: '>= 0.8'}
@@ -976,9 +960,6 @@ packages:
 
   pako@1.0.11:
     resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
-
-  pako@2.2.0:
-    resolution: {integrity: sha512-zJq6RP/5q+TO2OpFV3FHzlPnFjmkb7Nc99a5SNjJE+uu/PkpChs+NIZSSzbBoD+6kjiISXjfYdwj1ZRQ81dz/w==}
 
   path-scurry@2.0.2:
     resolution: {integrity: sha512-3O/iVVsJAPsOnpwWIeD+d6z/7PmqApyQePUtCndjatj/9I5LylHvt5qluFaBT3I5h3r1ejfR056c+FCv+NnNXg==}
@@ -1414,6 +1395,9 @@ packages:
     resolution: {integrity: sha512-1tB5mhVo7U+ETBKNf92xT4hrQa3pm0MZ0PQvuDnWgAAGHDsfp4lPSpiS6psrSiet87wyGPh9ft6wmhOMQ0hDiw==}
     engines: {node: '>=14.16'}
 
+  strnum@1.1.2:
+    resolution: {integrity: sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==}
+
   stylis@4.4.0:
     resolution: {integrity: sha512-5Z9ZpRzfuH6l/UAvCPAPUo3665Nk2wLaZU3x+TLHKVzIz33+sbJqbtrYoC3KD4/uVOr2Zp+L0LySezP9OHV9yA==}
 
@@ -1501,9 +1485,6 @@ packages:
 
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
-
-  zod@4.6.2:
-    resolution: {integrity: sha512-lh5RCAGFa1Cm2hjtNwLQhSs/AsqdWnTQaBER9fEwN/88pSh7KOtJavtBx/0VlkN/uFd61SwYmljLMDAsHlvzBQ==}
 
   zustand@4.5.7:
     resolution: {integrity: sha512-CHOUy7mu3lbD6o6LJLfllpjkzhHXSBlX8B9+qPddUsIfeF5S/UZ5q0kmCsnRqT1UHFQZchNFDDzMbQsuesHWlw==}
@@ -1775,40 +1756,37 @@ snapshots:
     dependencies:
       pako: 1.0.11
 
-  '@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))':
+  '@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))':
     dependencies:
-      '@pdfme/pdf-lib': 6.1.12
-      acorn: 8.18.0
+      '@pdfme/pdf-lib': 1.18.4
       antd: 5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0)
       buffer: 6.0.3
       form-render: 2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)
-      zod: 4.6.2
+      zod: 3.25.76
 
-  '@pdfme/generator@5.5.10(@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))(@pdfme/schemas@5.5.10(@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))))':
+  '@pdfme/generator@4.5.2(@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))(@pdfme/schemas@4.5.2(@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))))':
     dependencies:
-      '@pdfme/common': 5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))
-      '@pdfme/pdf-lib': 6.1.12
-      '@pdfme/schemas': 5.5.10(@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))
+      '@pdfme/common': 4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))
+      '@pdfme/pdf-lib': 1.18.4
+      '@pdfme/schemas': 4.5.2(@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))
+      atob: 2.1.2
       fontkit: 2.0.4
 
-  '@pdfme/pdf-lib@6.1.12':
+  '@pdfme/pdf-lib@1.18.4':
     dependencies:
       '@pdf-lib/standard-fonts': 1.0.0
       '@pdf-lib/upng': 1.0.1
-      color: 5.0.3
+      color: 4.2.3
       node-html-better-parser: 1.5.9
-      pako: 2.2.0
+      pako: 1.0.11
 
-  '@pdfme/schemas@5.5.10(@pdfme/common@5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))':
+  '@pdfme/schemas@4.5.2(@pdfme/common@4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0)))':
     dependencies:
-      '@pdfme/common': 5.5.10(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))
-      '@pdfme/pdf-lib': 6.1.12
-      air-datepicker: 3.6.0
+      '@pdfme/common': 4.5.2(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(form-render@2.5.6(antd@5.29.3(date-fns@4.4.0)(react-dom@16.14.0(react@16.14.0))(react@16.14.0))(react-dom@16.14.0(react@16.14.0))(react@16.14.0))
+      '@pdfme/pdf-lib': 1.18.4
       bwip-js: 4.11.4
-      date-fns: 4.4.0
-      dompurify: 3.4.15
+      fast-xml-parser: 4.5.7
       fontkit: 2.0.4
-      lucide: 0.577.0
 
   '@pinojs/redact@0.4.0': {}
 
@@ -1928,12 +1906,7 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/trusted-types@2.0.7':
-    optional: true
-
   abstract-logging@2.0.1: {}
-
-  acorn@8.18.0: {}
 
   add-dom-event-listener@1.1.0:
     dependencies:
@@ -1951,8 +1924,6 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       screenfull: 5.2.0
       tslib: 2.8.1
-
-  air-datepicker@3.6.0: {}
 
   ajv-formats@3.0.1(ajv@8.20.0):
     optionalDependencies:
@@ -2032,6 +2003,8 @@ snapshots:
 
   async-validator@3.5.2: {}
 
+  atob@2.1.2: {}
+
   atomic-sleep@1.0.0: {}
 
   avvio@9.3.0:
@@ -2100,34 +2073,28 @@ snapshots:
     dependencies:
       color-name: 1.1.3
 
-  color-convert@3.1.3:
+  color-convert@2.0.1:
     dependencies:
-      color-name: 2.1.1
+      color-name: 1.1.4
 
   color-name@1.1.3: {}
 
   color-name@1.1.4: {}
-
-  color-name@2.1.1: {}
 
   color-string@1.9.1:
     dependencies:
       color-name: 1.1.4
       simple-swizzle: 0.2.4
 
-  color-string@2.1.4:
-    dependencies:
-      color-name: 2.1.1
-
   color@3.2.1:
     dependencies:
       color-convert: 1.9.3
       color-string: 1.9.1
 
-  color@5.0.3:
+  color@4.2.3:
     dependencies:
-      color-convert: 3.1.3
-      color-string: 2.1.4
+      color-convert: 2.0.1
+      color-string: 1.9.1
 
   colorette@2.0.20: {}
 
@@ -2194,10 +2161,6 @@ snapshots:
   dfa@1.2.0: {}
 
   dom-align@1.12.4: {}
-
-  dompurify@3.4.15:
-    optionalDependencies:
-      '@types/trusted-types': 2.0.7
 
   dotenv@16.6.1: {}
 
@@ -2284,6 +2247,10 @@ snapshots:
   fast-uri@3.1.7: {}
 
   fast-uri@4.1.4: {}
+
+  fast-xml-parser@4.5.7:
+    dependencies:
+      strnum: 1.1.2
 
   fastfall@1.5.1:
     dependencies:
@@ -2446,8 +2413,6 @@ snapshots:
 
   lru-cache@11.5.2: {}
 
-  lucide@0.577.0: {}
-
   media-typer@1.1.1: {}
 
   mime-db@1.54.0: {}
@@ -2503,8 +2468,6 @@ snapshots:
   pako@0.2.9: {}
 
   pako@1.0.11: {}
-
-  pako@2.2.0: {}
 
   path-scurry@2.0.2:
     dependencies:
@@ -3064,6 +3027,8 @@ snapshots:
 
   strip-json-comments@5.0.3: {}
 
+  strnum@1.1.2: {}
+
   stylis@4.4.0: {}
 
   thread-stream@3.2.0:
@@ -3131,8 +3096,6 @@ snapshots:
   yaml@2.9.0: {}
 
   zod@3.25.76: {}
-
-  zod@4.6.2: {}
 
   zustand@4.5.7(react@16.14.0):
     dependencies:
