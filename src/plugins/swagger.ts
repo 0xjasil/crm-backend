@@ -38,13 +38,17 @@ const swaggerPlugin: FastifyPluginAsync = async (fastify) => {
     },
   });
 
-  await fastify.register(swaggerUi, {
-    routePrefix: '/api/docs',
-    uiConfig: {
-      docExpansion: 'list',
-      deepLinking: false,
-    },
-  });
+  try {
+    await fastify.register(swaggerUi, {
+      routePrefix: '/api/docs',
+      uiConfig: {
+        docExpansion: 'list',
+        deepLinking: false,
+      },
+    });
+  } catch (err) {
+    fastify.log.warn(err, 'Swagger UI registration skipped');
+  }
 };
 
 export default fp(swaggerPlugin);
