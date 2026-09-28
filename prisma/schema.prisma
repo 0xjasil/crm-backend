@@ -1,0 +1,480 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String         @id @default(cuid())
+  name                String
+  email               String         @unique
+  emailVerified       Boolean        @default(false)
+  image               String?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  role                String?        @default("telecaller")
+  roleId              String?
+  userRole            Role?          @relation(fields: [roleId], references: [id])
+  branch              String?
+  banned              Boolean?
+  banReason           String?
+  banExpires          DateTime?
+  password            String?
+  accounts            Account[]
+  sessions            Session[]
+  createdAdmissions   Admission[]    @relation("CreatedAdmissions")
+  handledAdmissions   Admission[]    @relation("HandledAdmissions")
+  createdCallLogs     CallLog[]      @relation("CreatedCallLogs")
+  assignedByEnquiries Enquiry[]      @relation("AssignedByEnquiries")
+  assignedEnquiries   Enquiry[]      @relation("AssignedEnquiries")
+  createdEnquiries    Enquiry[]      @relation("CreatedEnquiries")
+  expenses            Expense[]
+  createdFollowUps    FollowUp[]     @relation("CreatedFollowUps")
+  createdInvoices     Invoice[]      @relation("CreatedInvoices")
+  receivedJobLeads    JobLead[]      @relation("JobLeadAssignee")
+  assignedJobLeads    JobLead[]      @relation("JobLeadAssigner")
+  assignedJobOrders   JobOrder[]     @relation("JobOrderAssigner")
+  managedJobOrders    JobOrder[]     @relation("ManagedJobOrders")
+  notifications       Notification[]
+  createdReceipts     Receipt[]      @relation("CreatedReceipts")
+
+  @@map("user")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  userId                String
+  accountId             String
+  providerId            String
+  accessToken           String?
+  refreshToken          String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  idToken               String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  permissions String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+
+  @@map("role")
+}
+
+model Branch {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  address   String?
+  phone     String?
+  email     String?
+  isActive  Boolean    @default(true)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  enquiries Enquiry[]
+  jobOrders JobOrder[]
+
+  @@map("branch")
+}
+
+model Course {
+  id           String      @id @default(cuid())
+  name         String      @unique
+  description  String?
+  duration     String?
+  courseFee    Float?
+  admissionFee Float?
+  semesterFee  Float?
+  isActive     Boolean     @default(true)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  admissions   Admission[]
+  enquiries    Enquiry[]
+  receipts     Receipt[]
+
+  @@map("course")
+}
+
+model Service {
+  id        String    @id @default(cuid())
+  name      String
+  price     Float     @default(0)
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+  isActive  Boolean   @default(true)
+  enquiries Enquiry[]
+
+  @@map("service")
+}
+
+model EnquirySource {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  enquiries Enquiry[]
+
+  @@map("enquiry_source")
+}
+
+model Enquiry {
+  id                String         @id @default(cuid())
+  candidateName     String
+  phone             String
+  contact2          String?
+  email             String?
+  address           String?
+  status            EnquiryStatus  @default(NEW)
+  notes             String?
+  feedback          String?
+  lastContactDate   DateTime?
+  branchId          String?
+  preferredCourseId String?
+  assignedToUserId  String?
+  createdByUserId   String?
+  assignedByUserId  String?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  serviceId         String?
+  source            String?
+  sourceId          String?
+  admissions        Admission[]
+  callLogs          CallLog[]
+  assignedBy        User?          @relation("AssignedByEnquiries", fields: [assignedByUserId], references: [id])
+  assignedTo        User?          @relation("AssignedEnquiries", fields: [assignedToUserId], references: [id])
+  branch            Branch?        @relation(fields: [branchId], references: [id])
+  createdBy         User?          @relation("CreatedEnquiries", fields: [createdByUserId], references: [id])
+  preferredCourse   Course?        @relation(fields: [preferredCourseId], references: [id])
+  service           Service?       @relation(fields: [serviceId], references: [id])
+  enquirySource     EnquirySource? @relation(fields: [sourceId], references: [id])
+  followUps         FollowUp[]
+  jobLeads          JobLead[]
+
+  @@index([status])
+  @@index([branchId])
+  @@index([assignedToUserId])
+  @@index([createdAt])
+  @@index([updatedAt])
+  @@map("enquiry")
+}
+
+model FollowUp {
+  id              String         @id @default(cuid())
+  scheduledAt     DateTime
+  status          FollowUpStatus @default(PENDING)
+  outcome         String?
+  notes           String?
+  enquiryId       String
+  createdByUserId String
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  createdBy       User           @relation("CreatedFollowUps", fields: [createdByUserId], references: [id])
+  enquiry         Enquiry        @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+
+  @@index([enquiryId])
+  @@index([status])
+  @@index([scheduledAt])
+  @@map("follow_up")
+}
+
+model CallLog {
+  id              String   @id @default(cuid())
+  callDate        DateTime @default(now())
+  duration        Int?
+  outcome         String?
+  notes           String?
+  enquiryId       String
+  createdByUserId String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdBy       User     @relation("CreatedCallLogs", fields: [createdByUserId], references: [id])
+  enquiry         Enquiry  @relation(fields: [enquiryId], references: [id], onDelete: Cascade)
+
+  @@index([enquiryId])
+  @@index([createdAt])
+  @@map("call_log")
+}
+
+model Admission {
+  id                String           @id @default(cuid())
+  admissionNumber   String           @unique
+  candidateName     String
+  mobileNumber      String
+  email             String?
+  gender            AdmissionGender?
+  dateOfBirth       DateTime?
+  address           String
+  leadSource        String?
+  lastQualification String?
+  yearOfPassing     Int?
+  percentageCGPA    String?
+  instituteName     String?
+  additionalNotes   String?
+  balance           Float            @default(0)
+  nextDueDate       DateTime?
+  status            AdmissionStatus  @default(PENDING)
+  enquiryId         String?
+  courseId          String
+  agentName         String?
+  agentCommission   Float?
+  createdByUserId   String
+  handledByUserId   String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  course            Course           @relation(fields: [courseId], references: [id])
+  createdBy         User             @relation("CreatedAdmissions", fields: [createdByUserId], references: [id])
+  enquiry           Enquiry?         @relation(fields: [enquiryId], references: [id])
+  handledBy         User?            @relation("HandledAdmissions", fields: [handledByUserId], references: [id])
+  receipts          Receipt[]
+
+  @@index([admissionNumber])
+  @@index([status])
+  @@index([courseId])
+  @@index([createdAt])
+  @@map("admission")
+}
+
+model Receipt {
+  id               String           @id @default(cuid())
+  receiptNumber    String           @unique
+  amountCollected  Float
+  collectedTowards CollectedTowards
+  paymentDate      DateTime         @default(now())
+  paymentMode      String?
+  transactionId    String?
+  notes            String?
+  admissionId      String
+  courseId         String
+  createdById      String
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  admission        Admission        @relation(fields: [admissionId], references: [id])
+  course           Course           @relation(fields: [courseId], references: [id])
+  createdBy        User             @relation("CreatedReceipts", fields: [createdById], references: [id])
+
+  @@index([receiptNumber])
+  @@index([admissionId])
+  @@index([paymentDate])
+  @@map("receipt")
+}
+
+model Invoice {
+  id              String        @id @default(cuid())
+  invoiceNumber   String        @unique
+  billedTo        String
+  invoiceDate     DateTime      @default(now())
+  dueDate         DateTime?
+  subtotal        Float         @default(0)
+  taxRate         Float         @default(0.18)
+  taxAmount       Float         @default(0)
+  serviceCharge   Float         @default(0)
+  otherCharges    Float         @default(0)
+  totalAmount     Float         @default(0)
+  status          InvoiceStatus @default(DRAFT)
+  notes           String?
+  createdByUserId String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  createdBy       User          @relation("CreatedInvoices", fields: [createdByUserId], references: [id])
+  items           InvoiceItem[]
+
+  @@index([invoiceNumber])
+  @@index([status])
+  @@index([invoiceDate])
+  @@map("invoice")
+}
+
+model InvoiceItem {
+  id              String   @id @default(cuid())
+  itemDescription String
+  quantity        Int
+  unitPrice       Float
+  lineTotal       Float
+  invoiceId       String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId])
+  @@map("invoice_item")
+}
+
+model Expense {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  amount      Float
+  category    ExpenseCategory
+  expenseDate DateTime
+  notes       String?
+  createdById String
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  createdBy   User            @relation(fields: [createdById], references: [id])
+
+  @@index([category])
+  @@index([expenseDate])
+  @@map("expense")
+}
+
+model JobOrder {
+  id          String    @id @default(cuid())
+  jobCode     String?
+  name        String
+  description String?
+  remarks     String?
+  managerId   String
+  assignerId  String?
+  branchId    String
+  startDate   DateTime
+  endDate     DateTime
+  createdAt   DateTime  @default(now())
+  jobLeads    JobLead[]
+  assigner    User?     @relation("JobOrderAssigner", fields: [assignerId], references: [id])
+  branch      Branch    @relation(fields: [branchId], references: [id])
+  manager     User      @relation("ManagedJobOrders", fields: [managerId], references: [id])
+
+  @@index([branchId])
+  @@index([managerId])
+  @@index([startDate])
+  @@index([endDate])
+  @@map("job_order")
+}
+
+model JobLead {
+  id         String        @id @default(cuid())
+  jobId      String
+  status     JobLeadStatus @default(PENDING)
+  leadId     String
+  assignerId String?
+  assigneeId String?
+  assignee   User?         @relation("JobLeadAssignee", fields: [assigneeId], references: [id])
+  assigner   User?         @relation("JobLeadAssigner", fields: [assignerId], references: [id])
+  job        JobOrder      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  lead       Enquiry       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([jobId])
+  @@index([leadId])
+  @@index([assigneeId])
+  @@index([status])
+  @@map("job_lead")
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType @default(GENERAL)
+  link      String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notification")
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  INTERESTED
+  NOT_INTERESTED
+  FOLLOW_UP
+  ENROLLED
+  DROPPED
+  INVALID
+}
+
+enum FollowUpStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum AdmissionGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AdmissionStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum CollectedTowards {
+  ADMISSION_FEE
+  COURSE_FEE
+  SEMESTER_FEE
+  OTHER
+}
+
+enum ExpenseCategory {
+  OFFICE_SUPPLIES
+  TRAVEL
+  UTILITIES
+  MARKETING
+  MEALS
+  EQUIPMENT
+  SOFTWARE
+  OTHER
+}
+
+enum JobLeadStatus {
+  PENDING
+  CLOSED
+}
+
+enum NotificationType {
+  ENQUIRY_ASSIGNED
+  JOB_ORDER_ASSIGNED
+  FOLLOW_UP_ASSIGNED
+  GENERAL
+}
