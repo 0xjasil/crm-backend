@@ -2,7 +2,7 @@
   "version": 2,
   "buildCommand": "npx prisma generate && npx tsc",
   "functions": {
-    "api/index.js": {
+    "api/index.ts": {
       "includeFiles": "dist/**"
     }
   },
