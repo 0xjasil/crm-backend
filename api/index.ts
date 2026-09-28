@@ -15,6 +15,7 @@ async function getApp(): Promise<FastifyInstance> {
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   try {
     const app = await getApp();
+    await app.ready();
     app.server.emit('request', req, res);
   } catch (error) {
     console.error('Fastify Serverless Handler Error:', error);

@@ -24,20 +24,22 @@ import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { reportRoutes } from './modules/reports/report.routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
+  const isDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL;
   const app = fastify({
-    logger: {
-      transport:
-        process.env.NODE_ENV === 'development'
-          ? {
-              target: 'pino-pretty',
-              options: {
-                translateTime: 'HH:MM:ss Z',
-                ignore: 'pid,hostname',
-              },
-            }
-          : undefined,
-      level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
-    },
+    logger: isDev
+      ? {
+          transport: {
+            target: 'pino-pretty',
+            options: {
+              translateTime: 'HH:MM:ss Z',
+              ignore: 'pid,hostname',
+            },
+          },
+          level: 'debug',
+        }
+      : {
+          level: 'info',
+        },
   });
 
   // Core Plugins
