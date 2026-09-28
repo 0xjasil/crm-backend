@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "prisma generate && tsc",
+  "buildCommand": "pnpm run build",
   "rewrites": [
     {
       "source": "/(.*)",

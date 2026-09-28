@@ -7,7 +7,7 @@
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "build": "tsc",
+    "build": "prisma generate && tsc",
     "start": "node dist/server.js",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
@@ -36,12 +36,12 @@
     "fastify-plugin": "^5.0.1",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
+    "prisma": "^6.19.0",
     "zod": "^3.25.51"
   },
   "devDependencies": {
     "@types/bcryptjs": "^3.0.0",
     "@types/node": "^22.13.9",
-    "prisma": "^6.19.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   }
