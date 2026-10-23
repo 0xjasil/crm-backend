@@ -108,7 +108,7 @@ export class InvoiceService {
         data: {
           invoiceNumber,
           billedTo: input.billedTo,
-          ...(input.customerId ? { customer: { connect: { id: input.customerId } } } : {}),
+          ...(input.customerId ? { customerId: input.customerId } : {}),
           invoiceDate: input.invoiceDate ? new Date(input.invoiceDate) : new Date(),
           dueDate: input.dueDate ? new Date(input.dueDate) : undefined,
           taxRate,

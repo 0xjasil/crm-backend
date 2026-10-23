@@ -8,6 +8,7 @@ export const healthRoutes: FastifyPluginAsync = async (fastify) => {
       documentation: '/api/docs',
       health: '/health',
       version: '1.0.0',
+      revision: process.env.VERCEL_GIT_COMMIT_SHA ?? 'local',
     };
   });
 
