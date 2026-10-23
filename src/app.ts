@@ -15,6 +15,8 @@ import { followUpRoutes } from './modules/follow-ups/follow-up.routes.js';
 import { callLogRoutes } from './modules/call-logs/call-log.routes.js';
 import { admissionRoutes } from './modules/admissions/admission.routes.js';
 import { invoiceRoutes } from './modules/invoices/invoice.routes.js';
+import { publicInvoiceRoutes } from './modules/invoices/public-invoice.routes.js';
+import { customerRoutes } from './modules/customers/customer.routes.js';
 import { receiptRoutes } from './modules/receipts/receipt.routes.js';
 import { expenseRoutes } from './modules/expenses/expense.routes.js';
 import { serviceRoutes } from './modules/services/service.routes.js';
@@ -69,6 +71,8 @@ export async function buildApp(): Promise<FastifyInstance> {
       await v1.register(callLogRoutes, { prefix: '/call-logs' });
       await v1.register(admissionRoutes, { prefix: '/admissions' });
       await v1.register(invoiceRoutes, { prefix: '/invoices' });
+      await v1.register(publicInvoiceRoutes, { prefix: '/public/invoices' });
+      await v1.register(customerRoutes, { prefix: '/customers' });
       await v1.register(receiptRoutes, { prefix: '/receipts' });
       await v1.register(expenseRoutes, { prefix: '/expenses' });
       await v1.register(serviceRoutes, { prefix: '/services' });

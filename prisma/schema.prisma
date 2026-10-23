@@ -35,6 +35,9 @@ model User {
   expenses            Expense[]
   createdFollowUps    FollowUp[]     @relation("CreatedFollowUps")
   createdInvoices     Invoice[]      @relation("CreatedInvoices")
+  createdCustomers    Customer[]     @relation("CreatedCustomers")
+  receivedInvoicePayments Payment[]   @relation("RecordedInvoicePayments")
+  invoiceActivities   InvoiceActivity[]
   receivedJobLeads    JobLead[]      @relation("JobLeadAssignee")
   assignedJobLeads    JobLead[]      @relation("JobLeadAssigner")
   assignedJobOrders   JobOrder[]     @relation("JobOrderAssigner")
@@ -300,6 +303,9 @@ model Invoice {
   subtotal        Float         @default(0)
   taxRate         Float         @default(0.18)
   taxAmount       Float         @default(0)
+  discountAmount Float         @default(0)
+  withholdingAmount Float       @default(0)
+  withholdingType String?
   serviceCharge   Float         @default(0)
   otherCharges    Float         @default(0)
   totalAmount     Float         @default(0)
@@ -308,13 +314,45 @@ model Invoice {
   createdByUserId String
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+  customerId      String?
+  amountPaid      Float         @default(0)
+  balanceDue      Float         @default(0)
+  shareToken      String?       @unique
+  remindersEnabled Boolean      @default(false)
+  reminderRules   String[]      @default([])
   createdBy       User          @relation("CreatedInvoices", fields: [createdByUserId], references: [id])
+  customer        Customer?     @relation(fields: [customerId], references: [id], onDelete: SetNull)
   items           InvoiceItem[]
+  payments        Payment[]
+  activities      InvoiceActivity[]
 
   @@index([invoiceNumber])
+  @@index([customerId])
   @@index([status])
   @@index([invoiceDate])
   @@map("invoice")
+}
+
+model Customer {
+  id              String    @id @default(cuid())
+  name            String
+  email           String?
+  phone           String?
+  address         String?
+  state           String?
+  gstin           String?
+  createdByUserId String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  createdBy       User?     @relation("CreatedCustomers", fields: [createdByUserId], references: [id], onDelete: SetNull)
+  invoices        Invoice[]
+  invoicePayments Payment[]
+
+  @@index([name])
+  @@index([email])
+  @@index([phone])
+  @@index([createdByUserId])
+  @@map("customer")
 }
 
 model InvoiceItem {
@@ -330,6 +368,55 @@ model InvoiceItem {
 
   @@index([invoiceId])
   @@map("invoice_item")
+}
+
+model Payment {
+  id              String   @id @default(cuid())
+  invoiceId       String
+  customerId      String?
+  paymentNumber   String   @unique
+  paymentDate     DateTime @default(now())
+  amount          Float
+  paymentMode     String
+  depositTo       String?
+  referenceNumber String?
+  notes           String?
+  createdByUserId String
+  createdAt       DateTime @default(now())
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  customer        Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  createdBy       User     @relation("RecordedInvoicePayments", fields: [createdByUserId], references: [id])
+
+  @@index([invoiceId, paymentDate])
+  @@index([customerId])
+  @@map("payment")
+}
+
+model PaymentNumberSettings {
+  id                     String   @id @default("default")
+  autoGenerate           Boolean  @default(true)
+  prefix                 String   @default("PAY-")
+  nextNumber             Int      @default(1)
+  padding                Int      @default(6)
+  restartEachFiscalYear  Boolean  @default(false)
+  lastResetFiscalYear    Int?
+  updatedAt              DateTime @updatedAt
+
+  @@map("payment_number_settings")
+}
+
+model InvoiceActivity {
+  id              String   @id @default(cuid())
+  invoiceId       String
+  userId          String
+  type            String
+  message         String
+  createdAt       DateTime @default(now())
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id])
+
+  @@index([invoiceId, createdAt])
+  @@map("invoice_activity")
 }
 
 model Expense {
@@ -432,6 +519,7 @@ enum FollowUpStatus {
 enum InvoiceStatus {
   DRAFT
   SENT
+  PARTIALLY_PAID
   PAID
   OVERDUE
   CANCELLED

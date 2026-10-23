@@ -2,7 +2,7 @@
 
 export const invoiceFilterSchema = z.object({
   search: z.string().optional(),
-  status: z.enum(['DRAFT', 'SENT', 'PAID', 'OVERDUE', 'CANCELLED']).optional(),
+  status: z.enum(['DRAFT', 'SENT', 'PARTIALLY_PAID', 'PAID', 'OVERDUE', 'CANCELLED']).optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   page: z.coerce.number().min(1).default(1),
@@ -16,19 +16,61 @@ export const invoiceItemInputSchema = z.object({
 });
 
 export const createInvoiceSchema = z.object({
+  invoiceNumber: z.string().trim().min(1).max(64).optional(),
   billedTo: z.string().min(1, 'Billed to information is required'),
+  customerId: z.string().optional(),
   invoiceDate: z.string().or(z.date()).default(() => new Date()),
   dueDate: z.string().or(z.date()).optional().nullable(),
   taxRate: z.coerce.number().min(0).max(1).default(0.18),
+  discountAmount: z.coerce.number().min(0).default(0),
+  withholdingAmount: z.coerce.number().min(0).default(0),
+  withholdingType: z.enum(['TDS', 'TCS']).optional().nullable(),
   serviceCharge: z.coerce.number().min(0).default(0),
   otherCharges: z.coerce.number().min(0).default(0),
-  status: z.enum(['DRAFT', 'SENT', 'PAID', 'OVERDUE', 'CANCELLED']).default('DRAFT'),
+  status: z.enum(['DRAFT', 'SENT', 'PARTIALLY_PAID', 'PAID', 'OVERDUE', 'CANCELLED']).default('DRAFT'),
   notes: z.string().optional().nullable(),
   items: z.array(invoiceItemInputSchema).min(1, 'At least one invoice item is required'),
+  initialPayment: z.object({
+    amount: z.coerce.number().positive(),
+    paymentNumber: z.string().trim().max(64).optional(),
+    paymentDate: z.string().or(z.date()),
+    paymentMode: z.string().trim().min(1).max(40),
+    depositTo: z.string().trim().max(120).optional().nullable(),
+    referenceNumber: z.string().trim().max(120).optional().nullable(),
+  }).optional(),
 });
+
+export const createPaymentSchema = z.object({
+  amount: z.coerce.number().positive(),
+  paymentNumber: z.string().trim().max(64).optional(),
+  paymentDate: z.string().or(z.date()).default(() => new Date()),
+  paymentMode: z.string().trim().min(1).max(40),
+  depositTo: z.string().trim().max(120).optional().nullable(),
+  referenceNumber: z.string().trim().max(120).optional().nullable(),
+  notes: z.string().trim().max(2000).optional().nullable(),
+});
+
+export const paymentSettingsSchema = z.object({
+  autoGenerate: z.boolean(),
+  prefix: z.string().trim().min(1).max(20),
+  nextNumber: z.coerce.number().int().min(1),
+  padding: z.coerce.number().int().min(1).max(12),
+  restartEachFiscalYear: z.boolean(),
+  lastResetFiscalYear: z.number().int().nullable().optional(),
+});
+
+export const reminderSettingsSchema = z.object({
+  remindersEnabled: z.boolean(),
+  reminderRules: z.array(z.string().regex(/^(before|on|after):\d+$/)).max(10),
+});
+
+export const sendInvoiceSchema = z.object({ email: z.string().email().max(254).optional() });
 
 export const updateInvoiceSchema = createInvoiceSchema.partial();
 
 export type InvoiceFilterInput = z.infer<typeof invoiceFilterSchema>;
 export type CreateInvoiceInput = z.infer<typeof createInvoiceSchema>;
 export type UpdateInvoiceInput = z.infer<typeof updateInvoiceSchema>;
+export type CreatePaymentInput = z.infer<typeof createPaymentSchema>;
+export type InvoiceItemInput = z.infer<typeof invoiceItemInputSchema>;
+export type PaymentSettingsInput = z.infer<typeof paymentSettingsSchema>;

@@ -12,7 +12,8 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "tsx prisma/seed.ts",
-    "db:migrate": "prisma migrate dev"
+    "db:migrate": "prisma migrate dev",
+    "test": "tsx --test src/modules/invoices/payment.utils.test.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
