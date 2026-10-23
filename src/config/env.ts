@@ -6,7 +6,6 @@ export const config = {
   host: process.env.HOST || '0.0.0.0',
   nodeEnv: process.env.NODE_ENV || 'development',
   databaseUrl: process.env.POSTGRES_PRISMA_DATABASE_URL
-    || process.env.POST_PRISMA_DATABASE_URL
     || process.env.DATABASE_URL
     || '',
   jwtSecret: process.env.JWT_SECRET || 'crm_elevate_super_secure_jwt_secret_key_2026',

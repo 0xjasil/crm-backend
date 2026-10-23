@@ -4,7 +4,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prismaPlugin: FastifyPluginAsync = async (fastify) => {
   const databaseUrl = process.env.POSTGRES_PRISMA_DATABASE_URL
-    || process.env.POST_PRISMA_DATABASE_URL
     || process.env.DATABASE_URL;
   if (!databaseUrl) throw new Error('Missing Prisma database connection URL');
 
