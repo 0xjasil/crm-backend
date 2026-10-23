@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "npx prisma db execute --schema prisma/schema.prisma --file prisma/migrations/202610230002_invoice_financial_fields/migration.sql && npx prisma generate && npx tsc",
+  "buildCommand": "DATABASE_URL=\"${POSTGRES_PRISMA_DATABASE_URL:-${POST_PRISMA_DATABASE_URL:-$DATABASE_URL}}\" npx prisma db execute --schema prisma/schema.prisma --file prisma/migrations/202610230002_invoice_financial_fields/migration.sql && npx prisma generate && npx tsc",
   "functions": {
     "api/index.ts": {
       "includeFiles": "{dist/**,src/services/pdf/templates/**,node_modules/@pdfme/**}"
