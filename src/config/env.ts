@@ -11,7 +11,7 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET || 'crm_elevate_super_secure_jwt_secret_key_2026',
   cookieSecret: process.env.COOKIE_SECRET || 'crm_elevate_cookie_secret_key_2026_very_long',
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
-  backendUrl: process.env.BACKEND_URL || 'https://crm-backend-7aum.vercel.app',
+  backendUrl: process.env.BACKEND_URL || 'https://crm-backend-ten-pi.vercel.app',
   resendApiKey: process.env.RESEND_API_KEY || '',
   emailFrom: process.env.EMAIL_FROM || '',
 };
