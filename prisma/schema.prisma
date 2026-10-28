@@ -114,7 +114,7 @@ model Branch {
 
 model Course {
   id           String      @id @default(cuid())
-  name         String      @unique
+  name         String
   description  String?
   duration     String?
   courseFee    Float?

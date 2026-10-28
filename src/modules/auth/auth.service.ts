@@ -8,7 +8,7 @@ export class AuthService {
 
   async login(input: LoginInput) {
     const user = await this.prisma.user.findUnique({
-      where: { email: input.email.toLowerCase() },
+      where: { email: input.email.toLowerCase().trim() },
     });
 
     if (!user) {
@@ -39,7 +39,7 @@ export class AuthService {
 
   async register(input: RegisterInput) {
     const existingUser = await this.prisma.user.findUnique({
-      where: { email: input.email.toLowerCase() },
+      where: { email: input.email.toLowerCase().trim() },
     });
 
     if (existingUser) {
@@ -51,7 +51,7 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         name: input.name,
-        email: input.email.toLowerCase(),
+        email: input.email.toLowerCase().trim(),
         password: hashedPassword,
         role: input.role,
         branch: input.branch,

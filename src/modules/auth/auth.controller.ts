@@ -17,6 +17,22 @@ export class AuthController {
       branch: user.branch,
     });
 
+    reply.setCookie('token', token, {
+      path: '/',
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+    });
+
+    reply.setCookie('user', encodeURIComponent(JSON.stringify(user)), {
+      path: '/',
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+    });
+
     reply.setCookie('auth_token', token, {
       path: '/',
       httpOnly: true,

@@ -10,13 +10,13 @@ const __dirname = path.dirname(__filename);
 
 export class PDFService {
   private static async getPdfme() {
-    const [{ generate }, { text, table, svg, line, multiVariableText }] = await Promise.all([
+    const [{ generate }, { text, table, svg, image, line, multiVariableText }] = await Promise.all([
       import('@pdfme/generator'),
       import('@pdfme/schemas'),
     ]);
     return {
       generate,
-      plugins: { text, table, svg, line, multiVariableText },
+      plugins: { text, table, svg, image, line, multiVariableText },
     };
   }
 

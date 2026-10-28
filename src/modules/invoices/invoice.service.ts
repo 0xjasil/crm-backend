@@ -151,7 +151,6 @@ export class InvoiceService {
         throw new BadRequestError('An initial payment can only be added before any payments have been recorded');
       }
       let subtotal = existing.subtotal;
-      let taxAmount = existing.taxAmount;
       let totalAmount = existing.totalAmount;
       const taxRate = input.taxRate !== undefined ? input.taxRate : existing.taxRate;
       const serviceCharge = input.serviceCharge !== undefined ? input.serviceCharge : existing.serviceCharge;
@@ -176,8 +175,9 @@ export class InvoiceService {
 
         await tx.invoiceItem.createMany({ data: newItems });
 
-        taxAmount = subtotal * taxRate;
       }
+      // A tax-rate-only edit must recalculate amounts even when items are unchanged.
+      const taxAmount = subtotal * taxRate;
       const discountAmount = Math.min(subtotal, input.discountAmount ?? existing.discountAmount);
       const withholdingAmount = Math.min(
         Math.max(0, subtotal - discountAmount),
