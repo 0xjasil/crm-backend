@@ -28,6 +28,7 @@ model User {
   sessions            Session[]
   createdAdmissions   Admission[]    @relation("CreatedAdmissions")
   handledAdmissions   Admission[]    @relation("HandledAdmissions")
+  assignedAdmissions  Admission[]    @relation("AssignedAdmissions")
   createdCallLogs     CallLog[]      @relation("CreatedCallLogs")
   assignedByEnquiries Enquiry[]      @relation("AssignedByEnquiries")
   assignedEnquiries   Enquiry[]      @relation("AssignedEnquiries")
@@ -255,17 +256,20 @@ model Admission {
   agentCommission   Float?
   createdByUserId   String
   handledByUserId   String?
+  assignedToUserId  String?
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
   course            Course           @relation(fields: [courseId], references: [id])
   createdBy         User             @relation("CreatedAdmissions", fields: [createdByUserId], references: [id])
   enquiry           Enquiry?         @relation(fields: [enquiryId], references: [id])
   handledBy         User?            @relation("HandledAdmissions", fields: [handledByUserId], references: [id])
+  assignedTo        User?            @relation("AssignedAdmissions", fields: [assignedToUserId], references: [id])
   receipts          Receipt[]
 
   @@index([admissionNumber])
   @@index([status])
   @@index([courseId])
+  @@index([assignedToUserId])
   @@index([createdAt])
   @@map("admission")
 }

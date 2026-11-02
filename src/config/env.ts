@@ -1,10 +1,12 @@
 import dotenv from 'dotenv';
+import { normalizeNodeEnv, parseLogLevel } from './logging.js';
 dotenv.config();
 
 export const config = {
   port: parseInt(process.env.PORT || '5000', 10),
   host: process.env.HOST || '0.0.0.0',
-  nodeEnv: process.env.NODE_ENV || 'development',
+  nodeEnv: normalizeNodeEnv(process.env.NODE_ENV),
+  logLevel: parseLogLevel(process.env.LOG_LEVEL),
   databaseUrl: process.env.POSTGRES_PRISMA_DATABASE_URL
     || process.env.DATABASE_URL
     || '',

@@ -24,6 +24,7 @@ export const createAdmissionSchema = z.object({
   instituteName: z.string().optional().nullable(),
   additionalNotes: z.string().optional().nullable(),
   courseId: z.string().min(1, 'Course ID is required'),
+  assignedToUserId: z.string().min(1, 'An assignee is required'),
   enquiryId: z.string().optional().nullable(),
   agentName: z.string().optional().nullable(),
   agentCommission: z.coerce.number().optional().nullable(),

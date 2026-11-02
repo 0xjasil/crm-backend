@@ -97,12 +97,13 @@ export class InvoiceService {
       });
 
       const taxRate = input.taxRate ?? 0.18;
-      const taxAmount = subtotal * taxRate;
       const discountAmount = Math.min(subtotal, input.discountAmount ?? 0);
+      const taxableSubtotal = Math.max(0, subtotal - discountAmount);
+      const taxAmount = Math.round(taxableSubtotal * taxRate * 100) / 100;
       const withholdingAmount = Math.min(Math.max(0, subtotal - discountAmount), input.withholdingAmount ?? 0);
       const serviceCharge = input.serviceCharge ?? 0;
       const otherCharges = input.otherCharges ?? 0;
-      const totalAmount = Math.max(0, subtotal + taxAmount + serviceCharge + otherCharges - discountAmount - withholdingAmount);
+      const totalAmount = Math.round(Math.max(0, taxableSubtotal + taxAmount + serviceCharge + otherCharges - withholdingAmount) * 100) / 100;
 
       const invoice = await tx.invoice.create({
         data: {
@@ -177,13 +178,14 @@ export class InvoiceService {
 
       }
       // A tax-rate-only edit must recalculate amounts even when items are unchanged.
-      const taxAmount = subtotal * taxRate;
       const discountAmount = Math.min(subtotal, input.discountAmount ?? existing.discountAmount);
+      const taxableSubtotal = Math.max(0, subtotal - discountAmount);
+      const taxAmount = Math.round(taxableSubtotal * taxRate * 100) / 100;
       const withholdingAmount = Math.min(
         Math.max(0, subtotal - discountAmount),
         input.withholdingAmount ?? existing.withholdingAmount
       );
-      totalAmount = Math.max(0, subtotal + taxAmount + serviceCharge + otherCharges - discountAmount - withholdingAmount);
+      totalAmount = Math.round(Math.max(0, taxableSubtotal + taxAmount + serviceCharge + otherCharges - withholdingAmount) * 100) / 100;
       if (totalAmount < existing.amountPaid) throw new BadRequestError('Invoice total cannot be reduced below the amount already paid');
       const balanceDue = Math.round((totalAmount - existing.amountPaid) * 100) / 100;
 
@@ -265,8 +267,9 @@ export class InvoiceService {
     const invoice = await tx.invoice.findUniqueOrThrow({ where: { id: invoiceId } });
     const items = await tx.invoiceItem.findMany({ where: { invoiceId } });
     const subtotal = items.reduce((sum, item) => sum + item.lineTotal, 0);
-    const taxAmount = subtotal * invoice.taxRate;
-    const totalAmount = Math.max(0, subtotal + taxAmount + invoice.serviceCharge + invoice.otherCharges - invoice.discountAmount - invoice.withholdingAmount);
+    const taxableSubtotal = Math.max(0, subtotal - invoice.discountAmount);
+    const taxAmount = Math.round(taxableSubtotal * invoice.taxRate * 100) / 100;
+    const totalAmount = Math.round(Math.max(0, taxableSubtotal + taxAmount + invoice.serviceCharge + invoice.otherCharges - invoice.withholdingAmount) * 100) / 100;
     if (totalAmount < invoice.amountPaid) throw new BadRequestError('Invoice total cannot be reduced below the amount already paid');
     const balanceDue = Math.round((totalAmount - invoice.amountPaid) * 100) / 100;
     const status = invoice.amountPaid > 0 ? balanceDue === 0 ? InvoiceStatus.PAID : InvoiceStatus.PARTIALLY_PAID : invoice.status;

@@ -15,6 +15,7 @@ export class AuthController {
       name: user.name,
       role: user.role,
       branch: user.branch,
+      permissions: user.permissions,
     });
 
     reply.setCookie('token', token, {

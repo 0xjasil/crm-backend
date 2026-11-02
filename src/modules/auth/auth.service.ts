@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { ConflictError, UnauthorizedError } from '../../errors/app-error.js';
 import { LoginInput, RegisterInput } from './auth.schema.js';
+import { getUserEffectivePermissions } from './permissions.js';
 
 export class AuthService {
   constructor(private prisma: PrismaClient) {}
@@ -9,6 +10,7 @@ export class AuthService {
   async login(input: LoginInput) {
     const user = await this.prisma.user.findUnique({
       where: { email: input.email.toLowerCase().trim() },
+      include: { userRole: true },
     });
 
     if (!user) {
@@ -28,12 +30,14 @@ export class AuthService {
       throw new UnauthorizedError('Invalid email or password');
     }
 
+    const permissions = getUserEffectivePermissions(user);
     return {
       id: user.id,
       email: user.email,
       name: user.name,
       role: user.role,
       branch: user.branch,
+      permissions,
     };
   }
 
@@ -65,6 +69,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       branch: user.branch,
+      permissions: getUserEffectivePermissions(user),
     };
   }
 
@@ -79,6 +84,7 @@ export class AuthService {
         branch: true,
         image: true,
         createdAt: true,
+        userRole: { select: { permissions: true } },
       },
     });
 
@@ -86,6 +92,6 @@ export class AuthService {
       throw new UnauthorizedError('User session expired or user no longer exists');
     }
 
-    return user;
+    return { ...user, permissions: getUserEffectivePermissions(user) };
   }
 }

@@ -1,5 +1,7 @@
-import fastify, { FastifyInstance } from 'fastify';
+import fastify, { FastifyInstance, LogController } from 'fastify';
 import sensible from '@fastify/sensible';
+import { config } from './config/env.js';
+import { configureRequestLogging, getLoggerOptions } from './config/logging.js';
 import helmet from '@fastify/helmet';
 import prismaPlugin from './plugins/prisma.js';
 import corsPlugin from './plugins/cors.js';
@@ -27,23 +29,11 @@ import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { reportRoutes } from './modules/reports/report.routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
-  const isDev = process.env.NODE_ENV === 'development' && !process.env.VERCEL;
   const app = fastify({
-    logger: isDev
-      ? {
-          transport: {
-            target: 'pino-pretty',
-            options: {
-              translateTime: 'HH:MM:ss Z',
-              ignore: 'pid,hostname',
-            },
-          },
-          level: 'debug',
-        }
-      : {
-          level: 'info',
-        },
+    logger: getLoggerOptions({ nodeEnv: config.nodeEnv, vercel: process.env.VERCEL, logLevel: config.logLevel }),
+    logController: new LogController({ disableRequestLogging: true }),
   });
+  configureRequestLogging(app);
 
   // Core Plugins
   await app.register(sensible);

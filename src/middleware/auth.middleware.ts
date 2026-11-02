@@ -1,6 +1,7 @@
 ﻿import { FastifyReply, FastifyRequest } from 'fastify';
 import { UnauthorizedError } from '../errors/app-error.js';
 import { UserPayload } from '../types/index.js';
+import { getUserEffectivePermissions } from '../modules/auth/permissions.js';
 
 export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
   try {
@@ -22,7 +23,7 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
     // Verify user is active & not banned
     const user = await request.server.prisma.user.findUnique({
       where: { id: decoded.id },
-      select: { id: true, email: true, name: true, role: true, branch: true, banned: true },
+      select: { id: true, email: true, name: true, role: true, branch: true, banned: true, userRole: { select: { permissions: true } } },
     });
 
     if (!user) {
@@ -33,12 +34,14 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
       throw new UnauthorizedError('User account is banned');
     }
 
+    const permissions = decoded.permissions ?? getUserEffectivePermissions(user);
     request.user = {
       id: user.id,
       email: user.email,
       name: user.name,
       role: user.role,
       branch: user.branch,
+      permissions,
     };
   } catch (err) {
     if (err instanceof UnauthorizedError) {

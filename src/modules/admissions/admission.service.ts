@@ -5,21 +5,42 @@ import {
   CollectedTowards,
   EnquiryStatus,
 } from '@prisma/client';
-import { BadRequestError, NotFoundError } from '../../errors/app-error.js';
+import { BadRequestError, ForbiddenError, NotFoundError } from '../../errors/app-error.js';
 import {
   AdmissionFilterInput,
   CreateAdmissionInput,
   UpdateAdmissionInput,
 } from './admission.schema.js';
+import { hasFeatureAccess, isAdminRole, isManagerRole } from '../auth/permissions.js';
+
+type AdmissionUser = { id: string; role: string | null; branch: string | null; permissions?: string[] };
+
+export function getAdmissionVisibilityWhere(user: AdmissionUser): Prisma.AdmissionWhereInput {
+  if (isAdminRole(user.role)) return {};
+  if (isManagerRole(user.role)) {
+    if (!user.branch) return { id: '__no_branch_access__' };
+    return {
+      OR: [
+        { enquiry: { branchId: user.branch } },
+        { enquiryId: null, createdBy: { branch: user.branch } },
+      ],
+    };
+  }
+  return { assignedToUserId: user.id };
+}
+
+export function isEligibleAdmissionAssignee(user: { id: string; role: string | null; userRole?: { permissions: string[] } | null }): boolean {
+  return !isManagerRole(user.role) && hasFeatureAccess({ role: user.role, userRole: user.userRole }, 'projects');
+}
 
 export class AdmissionService {
   constructor(private prisma: PrismaClient) {}
 
-  async listAdmissions(filters: AdmissionFilterInput) {
+  async listAdmissions(filters: AdmissionFilterInput, user: AdmissionUser) {
     const { search, courseId, status, startDate, endDate, page, limit } = filters;
     const skip = (page - 1) * limit;
 
-    const where: Prisma.AdmissionWhereInput = {};
+    const where: Prisma.AdmissionWhereInput = { AND: [getAdmissionVisibilityWhere(user)] };
 
     if (courseId) where.courseId = courseId;
     if (status) where.status = status as AdmissionStatus;
@@ -31,11 +52,14 @@ export class AdmissionService {
     }
 
     if (search) {
-      where.OR = [
+      where.AND = [
+        ...(where.AND as Prisma.AdmissionWhereInput[]),
+        { OR: [
         { candidateName: { contains: search, mode: 'insensitive' } },
         { mobileNumber: { contains: search, mode: 'insensitive' } },
         { admissionNumber: { contains: search, mode: 'insensitive' } },
         { email: { contains: search, mode: 'insensitive' } },
+        ] },
       ];
     }
 
@@ -48,6 +72,7 @@ export class AdmissionService {
         include: {
           course: { select: { id: true, name: true, courseFee: true } },
           handledBy: { select: { id: true, name: true } },
+          assignedTo: { select: { id: true, name: true } },
           createdBy: { select: { id: true, name: true } },
           _count: {
             select: { receipts: true },
@@ -60,13 +85,14 @@ export class AdmissionService {
     return { admissions, total };
   }
 
-  async getAdmissionById(id: string) {
-    const admission = await this.prisma.admission.findUnique({
-      where: { id },
+  async getAdmissionById(id: string, user: AdmissionUser) {
+    const admission = await this.prisma.admission.findFirst({
+      where: { AND: [{ id }, getAdmissionVisibilityWhere(user)] },
       include: {
         course: true,
         enquiry: true,
         handledBy: { select: { id: true, name: true, email: true } },
+        assignedTo: { select: { id: true, name: true, email: true } },
         createdBy: { select: { id: true, name: true, email: true } },
         receipts: {
           orderBy: { paymentDate: 'desc' },
@@ -79,7 +105,33 @@ export class AdmissionService {
     return admission;
   }
 
-  async createAdmission(input: CreateAdmissionInput, currentUserId: string) {
+  private async getEligibleAssignee(userId: string, branch?: string | null) {
+    const assignee = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, role: true, branch: true, banned: true, userRole: { select: { permissions: true } } },
+    });
+    if (!assignee || assignee.banned || !isEligibleAdmissionAssignee(assignee)) {
+      throw new BadRequestError('Select an active user with Site Surveys & Projects permission who is not a manager');
+    }
+    if (branch && assignee.branch !== branch) throw new BadRequestError('Managers can assign admissions only to staff in their branch');
+    return assignee;
+  }
+
+  async getAdmissionAssignees(user: AdmissionUser) {
+    if (!hasFeatureAccess(user, 'projects')) throw new ForbiddenError('Site Surveys & Projects permission is required');
+    if (isManagerRole(user.role) && !user.branch) return [];
+    const users = await this.prisma.user.findMany({
+      where: { OR: [{ banned: false }, { banned: null }], ...(isManagerRole(user.role) ? { branch: user.branch } : {}) },
+      select: { id: true, name: true, role: true, branch: true, userRole: { select: { permissions: true } } },
+      orderBy: { name: 'asc' },
+    });
+    return users.filter(isEligibleAdmissionAssignee).map(({ id, name, role, branch }) => ({ id, name, role, branch }));
+  }
+
+  async createAdmission(input: CreateAdmissionInput, user: AdmissionUser) {
+    if (!hasFeatureAccess(user, 'projects')) throw new ForbiddenError('Site Surveys & Projects permission is required');
+    if (isManagerRole(user.role) && !user.branch) throw new BadRequestError('A branch is required to assign admissions');
+    const assignee = await this.getEligibleAssignee(input.assignedToUserId, isManagerRole(user.role) ? user.branch : undefined);
     const course = await this.prisma.course.findUnique({
       where: { id: input.courseId },
     });
@@ -118,7 +170,8 @@ export class AdmissionService {
           agentName: input.agentName,
           agentCommission: input.agentCommission,
           handledByUserId: input.handledByUserId || undefined,
-          createdByUserId: currentUserId,
+          createdByUserId: user.id,
+          assignedToUserId: assignee.id,
         },
       });
 
@@ -136,7 +189,7 @@ export class AdmissionService {
             transactionId: input.initialPayment.transactionId,
             admissionId: admission.id,
             courseId: input.courseId,
-            createdById: currentUserId,
+            createdById: user.id,
           },
         });
       }
@@ -153,8 +206,8 @@ export class AdmissionService {
     });
   }
 
-  async updateAdmission(id: string, input: UpdateAdmissionInput) {
-    await this.getAdmissionById(id);
+  async updateAdmission(id: string, input: UpdateAdmissionInput, user: AdmissionUser) {
+    await this.getAdmissionById(id, user);
 
     return this.prisma.admission.update({
       where: { id },
@@ -165,8 +218,16 @@ export class AdmissionService {
     });
   }
 
-  async deleteAdmission(id: string) {
-    await this.getAdmissionById(id);
+  async deleteAdmission(id: string, user: AdmissionUser) {
+    await this.getAdmissionById(id, user);
     return this.prisma.admission.delete({ where: { id } });
+  }
+
+  async reassignAdmission(id: string, assignedToUserId: string, user: AdmissionUser) {
+    if (!isAdminRole(user.role) && !isManagerRole(user.role)) throw new ForbiddenError('Only managers and administrators can reassign admissions');
+    if (isManagerRole(user.role) && !user.branch) throw new BadRequestError('A branch is required to reassign admissions');
+    await this.getAdmissionById(id, user);
+    const assignee = await this.getEligibleAssignee(assignedToUserId, isManagerRole(user.role) ? user.branch : undefined);
+    return this.prisma.admission.update({ where: { id }, data: { assignedToUserId: assignee.id }, include: { assignedTo: { select: { id: true, name: true } } } });
   }
 }
