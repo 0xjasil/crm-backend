@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { NotFoundError } from '../../errors/app-error.js';
+import { ConflictError, NotFoundError } from '../../errors/app-error.js';
 import { UpdateUserInput, UserFilterInput } from './user.schema.js';
 
 export class UserService {
@@ -98,6 +98,13 @@ export class UserService {
 
   async deleteUser(id: string) {
     await this.getUserById(id);
-    return this.prisma.user.delete({ where: { id } });
+    try {
+      return await this.prisma.user.delete({ where: { id } });
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2003') {
+        throw new ConflictError('This user is linked to existing CRM records and cannot be deleted yet.');
+      }
+      throw error;
+    }
   }
 }
