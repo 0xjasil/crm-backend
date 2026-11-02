@@ -9,6 +9,7 @@ import { errorHandler } from './middleware/error.middleware.js';
 import { healthRoutes } from './routes/health.routes.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { userRoutes } from './modules/users/user.routes.js';
+import { userWorkflowRoutes } from './modules/users/user-workflow.routes.js';
 import { masterDataRoutes } from './modules/master-data/master-data.routes.js';
 import { enquiryRoutes } from './modules/enquiries/enquiry.routes.js';
 import { followUpRoutes } from './modules/follow-ups/follow-up.routes.js';
@@ -65,6 +66,7 @@ export async function buildApp(): Promise<FastifyInstance> {
     async (v1) => {
       await v1.register(authRoutes, { prefix: '/auth' });
       await v1.register(userRoutes, { prefix: '/users' });
+      await v1.register(userWorkflowRoutes, { prefix: '/workflows/auth' });
       await v1.register(masterDataRoutes);
       await v1.register(enquiryRoutes, { prefix: '/enquiries' });
       await v1.register(followUpRoutes, { prefix: '/follow-ups' });
