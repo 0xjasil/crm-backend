@@ -27,6 +27,7 @@ import { jobOrderRoutes } from './modules/job-orders/job-order.routes.js';
 import { notificationRoutes } from './modules/notifications/notification.routes.js';
 import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { reportRoutes } from './modules/reports/report.routes.js';
+import { workflowCompatRoutes } from './modules/workflows/compat.routes.js';
 
 export async function buildApp(): Promise<FastifyInstance> {
   const app = fastify({
@@ -57,6 +58,7 @@ export async function buildApp(): Promise<FastifyInstance> {
       await v1.register(authRoutes, { prefix: '/auth' });
       await v1.register(userRoutes, { prefix: '/users' });
       await v1.register(userWorkflowRoutes, { prefix: '/workflows/auth' });
+      await v1.register(workflowCompatRoutes);
       await v1.register(masterDataRoutes);
       await v1.register(enquiryRoutes, { prefix: '/enquiries' });
       await v1.register(followUpRoutes, { prefix: '/follow-ups' });
