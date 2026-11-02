@@ -21,7 +21,7 @@ Standalone Modular Monolith CRM Backend built with Node.js, Fastify, TypeScript,
 Copy `.env.example` to `.env` and configure your PostgreSQL database URL:
 
 ```env
-DATABASE_URL="postgresql://postgres:post%402005@localhost:5432/Crm?schema=public"
+POSTGRES_PRISMA_DATABASE_URL="postgresql://postgres:post%402005@localhost:5432/Crm?schema=public"
 PORT=5000
 NODE_ENV=development
 JWT_SECRET="your_jwt_secret"
