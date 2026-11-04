@@ -505,10 +505,9 @@ model Notification {
 enum EnquiryStatus {
   NEW
   CONTACTED
-  INTERESTED
+  CONFIRMED
   NOT_INTERESTED
   FOLLOW_UP
-  ENROLLED
   DROPPED
   INVALID
 }

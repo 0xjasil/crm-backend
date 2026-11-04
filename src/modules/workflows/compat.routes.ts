@@ -98,15 +98,15 @@ export const workflowCompatRoutes: FastifyPluginAsync = async (app) => {
     ] = await Promise.all([
       app.prisma.enquiry.count({ where: enquiryWhere }),
       app.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.NEW } }),
-      app.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.INTERESTED } }),
-      app.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.ENROLLED } }),
+      app.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.CONFIRMED } }),
+      app.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.CONFIRMED } }),
       app.prisma.followUp.count({ where: { ...followUpWhere, status: FollowUpStatus.PENDING } }),
       app.prisma.followUp.count({ where: { ...followUpWhere, status: FollowUpStatus.PENDING, scheduledAt: { lt: startOfToday } } }),
       app.prisma.followUp.count({ where: { ...followUpWhere, scheduledAt: { gte: startOfToday, lt: startOfTomorrow } } }),
       app.prisma.callLog.count({ where: callLogWhere }),
       app.prisma.enquiry.count({ where: { ...enquiryWhere, createdAt: { gte: weekAgo } } }),
       app.prisma.callLog.count({ where: { ...callLogWhere, createdAt: { gte: weekAgo } } }),
-      app.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.ENROLLED, updatedAt: { gte: weekAgo } } }),
+      app.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.CONFIRMED, updatedAt: { gte: weekAgo } } }),
     ]);
 
     const interestRate = totalEnquiries ? Math.round((interestedLeadsCount / totalEnquiries) * 100) : 0;

@@ -27,7 +27,7 @@ export class DashboardService {
     ] = await Promise.all([
       this.prisma.enquiry.count({ where: enquiryWhere }),
       this.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.NEW } }),
-      this.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.ENROLLED } }),
+      this.prisma.enquiry.count({ where: { ...enquiryWhere, status: EnquiryStatus.CONFIRMED } }),
       this.prisma.followUp.count({ where: { ...followUpWhere, status: FollowUpStatus.PENDING } }),
       this.prisma.followUp.count({
         where: {

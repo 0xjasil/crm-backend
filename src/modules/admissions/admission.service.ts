@@ -194,11 +194,11 @@ export class AdmissionService {
         });
       }
 
-      // If created from an enquiry, mark enquiry as ENROLLED
+      // If created from an enquiry, mark enquiry as CONFIRMED
       if (input.enquiryId) {
         await tx.enquiry.update({
           where: { id: input.enquiryId },
-          data: { status: EnquiryStatus.ENROLLED },
+          data: { status: EnquiryStatus.CONFIRMED },
         });
       }
 

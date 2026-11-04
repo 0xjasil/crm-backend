@@ -28,8 +28,8 @@ export const createEnquirySchema = z.object({
   serviceId: z.string().optional().nullable(),
   assignedToUserId: z.string().optional().nullable(),
   status: z.enum([
-    'NEW', 'CONTACTED', 'INTERESTED', 'NOT_INTERESTED',
-    'FOLLOW_UP', 'ENROLLED', 'DROPPED', 'INVALID'
+    'NEW', 'CONTACTED', 'CONFIRMED', 'NOT_INTERESTED',
+    'FOLLOW_UP', 'DROPPED', 'INVALID'
   ]).default('NEW'),
 });
 
@@ -37,8 +37,8 @@ export const updateEnquirySchema = createEnquirySchema.partial();
 
 export const changeEnquiryStatusSchema = z.object({
   status: z.enum([
-    'NEW', 'CONTACTED', 'INTERESTED', 'NOT_INTERESTED',
-    'FOLLOW_UP', 'ENROLLED', 'DROPPED', 'INVALID'
+    'NEW', 'CONTACTED', 'CONFIRMED', 'NOT_INTERESTED',
+    'FOLLOW_UP', 'DROPPED', 'INVALID'
   ]),
   remarks: z.string().optional().nullable(),
 });
